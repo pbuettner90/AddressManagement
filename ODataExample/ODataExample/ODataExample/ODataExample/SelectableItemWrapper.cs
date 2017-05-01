@@ -1,0 +1,4 @@
+﻿using System; using System.Collections.ObjectModel;
+using System.ComponentModel; using System.Runtime.CompilerServices; using ODataExample.Models;
+
+namespace ODataExample { 	public class SelectableItemWrapper<T> : INotifyPropertyChanged 	{ 		bool _setTextFields; 		public bool SetTextFields 		{ 			get 			{ 				return _setTextFields; 			}  			set 			{ 				_setTextFields = value; 				OnPropertyChanged(); 			} 		}  		public T Item { get; set; }  		bool isSelected = false;  		public bool IsSelected 		{ 			get 			{ 				return isSelected; 			}  			set 			{ 				if (isSelected != value) 				{ 					isSelected = value; 					PropertyChanged(this, new PropertyChangedEventArgs("IsSelected")); 				} 			} 		}  		public event PropertyChangedEventHandler PropertyChanged = delegate { };  		public void OnPropertyChanged([CallerMemberName] string name = null) => 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));  	} }  
