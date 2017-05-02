@@ -10,72 +10,61 @@ using ODataExample.Services;
 
 namespace ODataExample.ViewModels
 {
-	public class AddressDetailViewModel : BaseViewModel
+	public class NewAddressViewModel : BaseViewModel
 	{
 		public Address Address { get; set; }
-		public SelectableItemWrapper<Address> WrapperAddress { get; set; }
 
-		INavigation _navigation;
-		bool _isEdit;
-		bool _setTextFields;
-		bool _isSet = true;
-		OData data = new OData();
+	    private string _firstName;
+	    private string _lastName;
+	    private string _street;
+	    private string _plz;
+	    private string _city;
+
+	    public string FirstName { get { return _firstName; } set { SetProperty(ref _firstName, value); } }
+	    public string LastName { get { return _lastName; } set { SetProperty(ref _lastName, value); } }
+	    public string Street { get { return _street; } set { SetProperty(ref _street, value); } }
+	    public string City { get { return _city; } set { SetProperty(ref _city, value); } }
+	    public string Plz { get { return _plz; } set { SetProperty(ref _plz, value); } }
+
+        bool _isSet;
 
 		public Command ShowMapCommand { get; set; }
 		public Command AddAddressCommand { get; set; }
 		public Command GetAddressCommand { get; set; }
 
-		public bool IsEdit
+		public NewAddressViewModel()
 		{
-			get { return _isEdit; }
-			set { SetProperty(ref _isEdit, value); }
-		}
-
-		public bool SetTextFields
-		{
-			get
-			{
-				return _setTextFields;
-			}
-
-			set { SetProperty(ref _setTextFields, value); }
-		}
-
-		public AddressDetailViewModel(Photo photo, INavigation navigation)
-		{
-		}
-
-		public AddressDetailViewModel(INavigation navigation)
-		{
-			_navigation = navigation;
-
+			
 			if (Address == null)
 			{
 				Address = new Address();
-				_isEdit = false;
-				_setTextFields = true;
 			}
 
-			ShowMapCommand = new Command(async () => await ShowMap());
+			ShowMapCommand = new Command(async () => await ShowMap(Address));
 			AddAddressCommand = new Command(async () => await AddAddress());
 			GetAddressCommand = new Command(async () => await GetAddress());
 		}
 
-		public AddressDetailViewModel(SelectableItemWrapper<Address> address)
+		public NewAddressViewModel(Address address)
 		{
-			WrapperAddress = address;
-			Debug.WriteLine("ListView Selected: " + address.Item.FirstName);
-			//_isEdit = true;
-			//_setTextFields = false;
-			//WrapperAddress = address;
+			_isSet = true;
 
+			Address = address;
+
+			CopyDataToTextField();
+
+			ShowMapCommand = new Command(async () => await ShowMap(Address));
+			AddAddressCommand = new Command(() => AddAddress());
+			GetAddressCommand = new Command(async () => await GetAddress());
 		}
 
-		public AddressDetailViewModel(Address address)
+		private void CopyDataToTextField()
 		{
-			_isEdit = true;
-			_setTextFields = false;
-			Address = address;
+			FirstName = Address.FirstName;
+			LastName = Address.LastName;
+			Street = Address.Street;
+			City = Address.City;
+			Plz = Address.Plz;   
 		}
 
 		async Task GetUserLocation()
@@ -104,10 +93,15 @@ namespace ODataExample.ViewModels
 				var apiKey = "AIzaSyACqhxmHfAZXslRcDf2uVZ6UTW1jPhP2KA";
 				var googleApi = $"https://maps.googleapis.com/maps/api/geocode/json?latlng={latitude.ToString(Separator.changeSeparator())},{longitude.ToString(Separator.changeSeparator())}&key={apiKey}";
 				var googleResponseJson = await GoogleService.RequestGoogle(googleApi);
-				await JSONParser.AddressJsonParser(Address, googleResponseJson);
-			}
 
-			catch (Exception ex)
+				await JsonParser.AddressJsonParser(Address, googleResponseJson);
+
+			    City = Address.City;
+			    Plz = Address.Plz;
+			    Street = Address.Street;
+            }
+
+            catch (Exception ex)
 			{
 				await Application.Current.MainPage.DisplayAlert("GPS erforderlich", "Bitte GPS aktivieren", "OK");
 				Debug.WriteLine(ex.Message);
@@ -116,31 +110,39 @@ namespace ODataExample.ViewModels
 			finally
 			{
 				IsBusy = false;
-
-			}
+            }
 		}
 
 		async Task AddAddress()
 		{
-			//await SearchDatabase(Address);
+		    try
+		    {
+		        Address = new Address
+		        {
+		            FirstName = FirstName,
+		            LastName = LastName,
+                    City = City,
+                    Street = Street,
+                    Plz = Plz
+		        };
 
-			if (_isSet)
-			{
-				await App.NavigationPage.Navigation.PushAsync(new AddressPage(_navigation, Address));
+                if (_isSet)
+		        {
+		            MessagingCenter.Send(this, "NavigateToAddresses", Address);
+					await DependencyService.Get<IDataService>().AddAddressAsync(Address);
+					MessagingCenter.Send(this, "AddCustomer", Address);
+		        }
 
-			}
+		        else
+		        {
+		            MessagingCenter.Send(this, "NavigateToAddresses", Address);
+		        }
+		    }
 
-			else
-			{
-				Debug.WriteLine("Update");
-				//data.UpdateData(Address.Id, Address.FirstName, Address.Street, Address.City);
-				await App.NavigationPage.Navigation.PopAsync();
-			}
-		}
-
-		async Task ShowMap()
-		{
-			await App.NavigationPage.Navigation.PushAsync(new MapPage(Address));
+		    catch (Exception ex)
+		    {
+		        Debug.WriteLine(ex.Message);
+		    }
 		}
 
 		async Task GetAddress()
@@ -148,21 +150,10 @@ namespace ODataExample.ViewModels
 			await GetUserLocation();
 		}
 
-		public Command BtnEditCommand
+		public async Task ShowMap(Address address)
 		{
-			get
-			{
-				return new Command(() =>
-				{
-					Debug.WriteLine("BtnEdit");
-					_setTextFields = true;
-				});
-			}
+			Address = address;
+			MessagingCenter.Send(this, "NavigateToMap", address);
 		}
 	}
 }
-
-	
-
-
-
