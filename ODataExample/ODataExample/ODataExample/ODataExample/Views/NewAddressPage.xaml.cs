@@ -14,14 +14,14 @@ namespace ODataExample.Views
 		{
 			InitializeComponent();
 			Title = "Addresse prüfen";
-			BindingContext = new AddressDetailViewModel();
+			BindingContext = new NewAddressViewModel();
 		}
 
 		public NewAddressPage(Address address)
 		{
 			InitializeComponent();
 			Title = "Datensatz hinzufügen";
-			BindingContext = new AddressDetailViewModel(address);
+			BindingContext = new NewAddressViewModel(address);
 		}
 
 		protected override void OnAppearing()
@@ -38,18 +38,28 @@ namespace ODataExample.Views
 
 		void SubscribeToMessages()
 		{
-			MessagingCenter.Subscribe<AddressDetailViewModel, Address>(this, "NavigateToDetail", async (obj, address) =>
+			MessagingCenter.Subscribe<NewAddressViewModel, Address>(this, "NavigateToAddresses", async (obj, address) =>
 			{
 				if (address != null)
 				{
 					await Navigation.PushAsync(new AddressPage(address));
 				}
 			});
+
+			MessagingCenter.Subscribe<NewAddressViewModel, Address>(this, "NavigateToMap", async (obj, address) =>
+			{
+				if (address != null)
+				{
+					await Navigation.PushAsync(new MapPage(address));
+				}
+			});
 		}
 
 		void UnsubscribeFromMessages()
 		{
-			MessagingCenter.Unsubscribe<AddressDetailViewModel, Address>(this, "NavigateToDetail");
+			MessagingCenter.Unsubscribe<NewAddressViewModel, Address>(this, "NavigateToAddresses");
+			MessagingCenter.Unsubscribe<NewAddressViewModel, Address>(this, "NavigateToMap");
+
 		}
 	}
 }

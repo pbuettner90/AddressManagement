@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using ODataExample.Models;
+using ODataExample.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.GoogleMaps;
 using Xamarin.Forms.Xaml;
@@ -15,21 +16,11 @@ namespace ODataExample.Views
 		public MapPage(Address address)
 		{
 			InitializeComponent();
+			ShowMap(address);
 
-		    Task.Run(async () =>
-		    {
-		        try
-		        {
-		            await ShowMap(address);
-		        }
+		}
 
-		        catch (Exception ex)
 
-		        {
-		            Debug.WriteLine(ex.Message);
-		        }
-		    });
-        }
 
 		async Task ShowMap(Address address)
 		{

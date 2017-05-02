@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using ODataExample.Models;
 using ODataExample.ViewModels;
+using ODataExample.Views;
 using Xamarin.Forms;
 
 namespace ODataExample
@@ -11,7 +12,7 @@ namespace ODataExample
 		{
 			Title = "Datensatz bearbeiten";
 			InitializeComponent();
-			BindingContext = new AddressEditViewModel(address);
+			BindingContext = new EditAddressViewModel(address);
 		}
 
 		protected override void OnAppearing()
@@ -28,18 +29,28 @@ namespace ODataExample
 
 		void SubscribeToMessages()
 		{
-			MessagingCenter.Subscribe<AddressEditViewModel, string>(this, "Navigate", async (obj, s) =>
+			MessagingCenter.Subscribe<EditAddressViewModel, string>(this, "NavigateToAddresses", async (obj, s) =>
 			{
 				if (s == "AddressPage")
 				{
 					await Navigation.PopAsync();
 				}
 			});
+
+			MessagingCenter.Subscribe<EditAddressViewModel, Address>(this, "NavigateToMap", async (obj, address) =>
+			{
+				if (address != null)
+				{
+					await Navigation.PushAsync(new MapPage(address));
+				}
+			});
 		}
 
 		void UnsubscribeFromMessages()
 		{
-			MessagingCenter.Unsubscribe<AddressEditViewModel, string>(this, "Navigate");
+			MessagingCenter.Unsubscribe<EditAddressViewModel, string>(this, "NavigateToAddresses");
+			MessagingCenter.Unsubscribe<EditAddressViewModel, Address>(this, "NavigateToMap");
+
 		}
 	}
 }
