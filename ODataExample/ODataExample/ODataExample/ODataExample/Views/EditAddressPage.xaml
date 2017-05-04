@@ -33,14 +33,14 @@
 						 Margin="10" Spacing="60">
 
 				<Entry x:Name="FirstName" 
-					   Text="{Binding FirstName}" 
+					   Text="{Binding Address.FirstName}" 
 					   IsEnabled = "{Binding SetTextFields}"
 					   WidthRequest="120">
 				</Entry>
 
 				<Entry x:Name="LastName" 
 					IsEnabled = "{Binding SetTextFields}"
-					Text="{Binding LastName}" 
+					Text="{Binding Address.LastName}" 
 				    WidthRequest="120"/>
 
             </StackLayout>
@@ -50,7 +50,7 @@
                 <Entry 
 					x:Name="Street" 
 					IsEnabled = "{Binding SetTextFields}"
-					Text="{Binding Street}" />
+					Text="{Binding Address.Street}" />
             </StackLayout>
 
             <StackLayout 
@@ -72,13 +72,13 @@
             <StackLayout Orientation="Horizontal" Margin="10" Spacing="60">
                 <Entry 
 					x:Name="Plz" 
-					Text="{Binding Plz}" 
+					Text="{Binding Address.Plz}" 
 					WidthRequest="100"  
 					IsEnabled="{Binding SetTextFields}"
                 />
                 <Entry 
 					x:Name="City" 
-					Text="{Binding City}" 
+					Text="{Binding Address.City}" 
 					WidthRequest="150" 
 					IsEnabled="{Binding SetTextFields}"
                 />

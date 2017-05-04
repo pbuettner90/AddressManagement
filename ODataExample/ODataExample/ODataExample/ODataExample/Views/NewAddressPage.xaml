@@ -24,18 +24,18 @@
 						 Margin="10" Spacing="60">
 
 				<Entry x:Name="FirstName" 
-					   Text="{Binding FirstName}" 
+					   Text="{Binding Address.FirstName}" 
 					   WidthRequest="120" />
 
 				<Entry x:Name="LastName" 
-				       Text="{Binding LastName}" 
+				       Text="{Binding Address.LastName}" 
 				       WidthRequest="120" />
             </StackLayout>
 
             <StackLayout Margin="10">
                 <Label Text="Strasse" FontSize="Medium" />
                 <Entry x:Name="Street" 
-				       Text="{Binding Street}" />
+				       Text="{Binding Address.Street}" />
             </StackLayout>
 
             <StackLayout Orientation="Horizontal" Margin="10" Spacing="40">
@@ -48,9 +48,9 @@
             </StackLayout>
 
             <StackLayout Orientation="Horizontal" Margin="10" Spacing="60">
-                <Entry x:Name="Plz" Text="{Binding Plz}" WidthRequest="100"
+                <Entry x:Name="Plz" Text="{Binding Address.Plz}" WidthRequest="100"
                 />
-                <Entry x:Name="City" Text="{Binding City}" WidthRequest="150"
+                <Entry x:Name="City" Text="{Binding Address.City}" WidthRequest="150"
                 />
             </StackLayout>
 

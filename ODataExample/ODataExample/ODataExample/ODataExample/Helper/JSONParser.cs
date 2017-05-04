@@ -6,11 +6,11 @@ using ODataExample.Models;
 using ODataExample.Models.JSON;
 using Xamarin.Forms;
 
-namespace ODataExample.Services
+namespace ODataExample.Helper
 {
 	public class JsonParser
 	{
-		public static async Task AddressJsonParser(Address address, string json)
+		public static async Task<Address> AddressJsonParser(Address address, string json)
 		{
 			if (json != null)
 			{
@@ -21,6 +21,9 @@ namespace ODataExample.Services
 					address.City = r.results[0].address_components[2].short_name;
 					address.Street = r.results[0].address_components[1].short_name + " " + r.results[0].address_components[0].short_name;
 					address.Plz = r.results[0].address_components[7].short_name;
+
+					return address;
+
 				}
 
 				catch (Exception ex)
@@ -30,6 +33,8 @@ namespace ODataExample.Services
 					Debug.WriteLine(ex.Message);
 				}
 			}
+
+			return null;
 		}
 	}
 }

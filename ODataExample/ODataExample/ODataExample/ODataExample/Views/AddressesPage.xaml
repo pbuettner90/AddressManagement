@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	xmlns:local="clr-namespace:ODataExample.Helper"
 	xmlns:c="clr-namespace:ODataExample.Controls" 
 	x:Class="ODataExample.Views.AddressPage"
-	x:Name="BrowseAddressesPage" Title="Addressverwaltung">
+	x:Name="BrowseAddressesPage" 
+	Title="Addressverwaltung">
+
+	<ContentPage.Resources>
+		<ResourceDictionary>
+			<local:SelectedItemEventArgsToSelectedItemConverter x:Key="SelectedItemConverter" />
+		</ResourceDictionary>
+	</ContentPage.Resources>
+	
 	<ContentPage.Content>
 		<StackLayout Margin="10">
 			<StackLayout Orientation="Horizontal">
@@ -31,10 +40,15 @@
 			<ListView 
 				x:Name="AddressList" 
 				IsRefreshing="{Binding IsBusy, Mode=OneWay}"
- 				IsPullToRefreshEnabled="false"
-				SelectedItem="{Binding SelectedAddressItem, Mode=TwoWay}"
+				IsPullToRefreshEnabled="false"
 				ItemsSource="{Binding AddressList}" 
 				Header="{Binding Header}">
+
+				<ListView.Behaviors>
+		<local:ListViewSelectedItemBehavior Command="{Binding OutputAgeCommand}" 
+            Converter="{StaticResource SelectedItemConverter}" />
+	</ListView.Behaviors>
+
 				<ListView.HeaderTemplate>
 					<DataTemplate>
 						<StackLayout Orientation="Horizontal" 
@@ -47,16 +61,17 @@
 				</ListView.HeaderTemplate>
 				<ListView.ItemTemplate>
 			<DataTemplate>
+						
 				<c:AddressCell
 								Id = "{Binding Id}" 
 								FirstName="{Binding FirstName}"
 								LastName="{Binding LastName}" 
 								Street="{Binding Street}" 
 								Plz="{Binding Plz}" 
-								City="{Binding City}" />
-/>
-							
-			</DataTemplate>
+								City="{Binding City}" 
+						/>
+								
+			</DataTemplate>				
 		</ListView.ItemTemplate>
 			</ListView>
 			<Grid Margin="10">

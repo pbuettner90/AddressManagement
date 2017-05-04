@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using ODataExample.Models;
 using ODataExample.Services;
+using System.Windows.Input;
 
 namespace ODataExample.ViewModels
 {
@@ -16,7 +17,7 @@ namespace ODataExample.ViewModels
 		public string Search { get; set; }
 
 		public Command CustomerSearchCommand { get; set; }
-
+		public ICommand SelectedItemCommand { get; private set; }
 		public ObservableCollection<Address> AddressList
 		{
 			get { return _addresses; }
@@ -25,11 +26,10 @@ namespace ODataExample.ViewModels
 
 		public string Header
 		{
-			
 			get => $"Ihre Addresse: {Address.FirstName} {Address.Street} {Address.City}";
-		}
+			}
 
-		public AddressesViewModel()
+		public AddressesViewModel() : this(new Address())
 		{
 			Address = new Address();
 			//GetData();
@@ -39,7 +39,9 @@ namespace ODataExample.ViewModels
 		{
 			AddressList = new ObservableCollection<Address>();
 			Address = address;
-			CustomerSearchCommand = new Command(async() => await CustomerSearch());
+			CustomerSearchCommand = new Command(async () => await CustomerSearch());
+
+			SelectedItemCommand = new Command<Address>(SelectedItem);
 
 			MessagingCenter.Subscribe<EditAddressViewModel, Address>(this, "UpdateAddress", async (obj, updateAddress) =>
 			{
@@ -50,17 +52,21 @@ namespace ODataExample.ViewModels
 				_addresses[i] = updateAddress;
 			});
 
-			MessagingCenter.Subscribe<NewAddressViewModel, Address>(this, "AddCustomer",  (obj, insertCustomer) =>
-			{
-					AddressList.Add(insertCustomer);
-			});
+			MessagingCenter.Subscribe<NewAddressViewModel, Address>(this, "AddCustomer", (obj, insertCustomer) =>
+		   {
+			   AddressList.Add(insertCustomer);
+		   });
 
-
-            CustomerSort();
+			CustomerSort();
 		}
 
-	    async Task CustomerSort()
-	    {
+		void SelectedItem(Address customer)
+		{
+			MessagingCenter.Send(this, "NavigateToEdit", customer);
+		}
+
+		async Task CustomerSort()
+		{
 			if (IsBusy)
 			{
 				return;
@@ -74,7 +80,7 @@ namespace ODataExample.ViewModels
 
 				foreach (var customer in addresses)
 				{
-				    AddressList.Add(customer);
+					AddressList.Add(customer);
 				}
 			}
 
@@ -93,27 +99,27 @@ namespace ODataExample.ViewModels
 		{
 			try
 			{
-                if (Search != null)
-                {
-			        var searchResults = new ObservableCollection<Address>();
-			        foreach (Address address in AddressList)
-			        {
-			            var firstName = address.FirstName + "";
-			            var city = address.City + "";
-			            var street = address.Street + "";
+				if (Search != null)
+				{
+					var searchResults = new ObservableCollection<Address>();
+					foreach (Address address in AddressList)
+					{
+						var firstName = address.FirstName + "";
+						var city = address.City + "";
+						var street = address.Street + "";
 
-                        if (firstName.Contains(Search) 
-                            || street.Contains(Search)
-                            || city.Contains(Search))
-			            {
-                            searchResults.Add(address);
-			            }
-			        }
+						if (firstName.Contains(Search)
+							|| street.Contains(Search)
+							|| city.Contains(Search))
+						{
+							searchResults.Add(address);
+						}
+					}
 
-			        AddressList.Clear();
-			        AddressList = searchResults;
-                }
-            }
+					AddressList.Clear();
+					AddressList = searchResults;
+				}
+			}
 
 			catch (Exception ex)
 			{
@@ -121,39 +127,18 @@ namespace ODataExample.ViewModels
 			}
 		}
 
-		Address _selectedAddressItem;
-		public Address SelectedAddressItem
-        {
-		    get
-		    {
-		        return _selectedAddressItem;
-		    }
-
-            set
-            {
-                SetProperty(ref _selectedAddressItem, value);
-
-				if (SelectedAddressItem == null)
-				{
-			        return;
-				}
-
-                MessagingCenter.Send(this, "NavigateToEdit", SelectedAddressItem);
-
-				_selectedAddressItem = null;
-			}
-		}
-
 		public Command NewCustomerCommand
 		{
 			get
 			{
-				return new Command( () =>
-			    {				   
-					MessagingCenter.Send(this, "AddNewAddress", Address);
-			    });
+				return new Command(() =>
+			   {
+				   MessagingCenter.Send(this, "AddNewAddress", Address);
+			   });
 			}
-		} 	}
+		}
+
+ 	}
 }
 
 

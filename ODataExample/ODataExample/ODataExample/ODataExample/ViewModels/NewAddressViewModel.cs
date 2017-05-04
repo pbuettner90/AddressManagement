@@ -7,25 +7,13 @@ using Xamarin.Forms;
 using Plugin.Geolocator;
 using ODataExample.Helper;
 using ODataExample.Services;
+using System.Globalization;
 
 namespace ODataExample.ViewModels
 {
 	public class NewAddressViewModel : BaseViewModel
 	{
 		public Address Address { get; set; }
-
-	    private string _firstName;
-	    private string _lastName;
-	    private string _street;
-	    private string _plz;
-	    private string _city;
-
-	    public string FirstName { get { return _firstName; } set { SetProperty(ref _firstName, value); } }
-	    public string LastName { get { return _lastName; } set { SetProperty(ref _lastName, value); } }
-	    public string Street { get { return _street; } set { SetProperty(ref _street, value); } }
-	    public string City { get { return _city; } set { SetProperty(ref _city, value); } }
-	    public string Plz { get { return _plz; } set { SetProperty(ref _plz, value); } }
-
         bool _isSet;
 
 		public Command ShowMapCommand { get; set; }
@@ -40,7 +28,7 @@ namespace ODataExample.ViewModels
 				Address = new Address();
 			}
 
-			ShowMapCommand = new Command(async () => await ShowMap(Address));
+			ShowMapCommand = new Command(async () => await ShowMap());
 			AddAddressCommand = new Command(async () => await AddAddress());
 			GetAddressCommand = new Command(async () => await GetAddress());
 		}
@@ -48,27 +36,15 @@ namespace ODataExample.ViewModels
 		public NewAddressViewModel(Address address)
 		{
 			_isSet = true;
-
 			Address = address;
-
-			CopyDataToTextField();
-
-			ShowMapCommand = new Command(async () => await ShowMap(Address));
+			ShowMapCommand = new Command(async () => await ShowMap());
 			AddAddressCommand = new Command(() => AddAddress());
 			GetAddressCommand = new Command(async () => await GetAddress());
 		}
 
-		private void CopyDataToTextField()
-		{
-			FirstName = Address.FirstName;
-			LastName = Address.LastName;
-			Street = Address.Street;
-			City = Address.City;
-			Plz = Address.Plz;   
-		}
-
 		async Task GetUserLocation()
 		{
+
 			if (IsBusy)
 			{
 				return;
@@ -90,15 +66,9 @@ namespace ODataExample.ViewModels
 				var latitude = position.Latitude;
 				var longitude = position.Longitude;
 
-				var apiKey = "AIzaSyACqhxmHfAZXslRcDf2uVZ6UTW1jPhP2KA";
-				var googleApi = $"https://maps.googleapis.com/maps/api/geocode/json?latlng={latitude.ToString(Separator.changeSeparator())},{longitude.ToString(Separator.changeSeparator())}&key={apiKey}";
-				var googleResponseJson = await GoogleService.RequestGoogle(googleApi);
-
-				await JsonParser.AddressJsonParser(Address, googleResponseJson);
-
-			    City = Address.City;
-			    Plz = Address.Plz;
-			    Street = Address.Street;
+				var googleApi = GoogleService.GetGoogleApi(latitude, longitude);
+				var googleResponseJson = await GoogleService.GetJsonResponse(googleApi);
+				await GoogleService.GetAddress(Address, googleResponseJson);
             }
 
             catch (Exception ex)
@@ -116,16 +86,7 @@ namespace ODataExample.ViewModels
 		async Task AddAddress()
 		{
 		    try
-		    {
-		        Address = new Address
-		        {
-		            FirstName = FirstName,
-		            LastName = LastName,
-                    City = City,
-                    Street = Street,
-                    Plz = Plz
-		        };
-
+			{
                 if (_isSet)
 		        {
 		            MessagingCenter.Send(this, "NavigateToAddresses", Address);
@@ -150,10 +111,9 @@ namespace ODataExample.ViewModels
 			await GetUserLocation();
 		}
 
-		public async Task ShowMap(Address address)
+		public async Task ShowMap()
 		{
-			Address = address;
-			MessagingCenter.Send(this, "NavigateToMap", address);
+			MessagingCenter.Send(this, "NavigateToMap", Address);
 		}
 	}
 }
