@@ -10,7 +10,8 @@
         <StackLayout BackgroundColor="Silver">
             <Button Margin="0,40,0,0" Text="Addresse prüfen" TextColor="White" BackgroundColor="Navy" Command="{Binding GoNewAddressCommand}" />
             <Button Text="Addressverwaltung" TextColor="White" BackgroundColor="Navy" Command="{Binding GoAddressesCommand}" />
-            <Button Text="About" TextColor="White" BackgroundColor="Navy" Command="{Binding GoAboutCommand}" />
+            <Button Text="Einstellungen" TextColor="White" BackgroundColor="Navy" Command="{Binding GoSettingsCommand}" />
+			<Button Text="About" TextColor="White" BackgroundColor="Navy" Command="{Binding GoAboutCommand}" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

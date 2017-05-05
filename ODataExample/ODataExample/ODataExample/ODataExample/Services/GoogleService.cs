@@ -11,15 +11,18 @@ namespace ODataExample.Services
 {
 	public class GoogleService
 	{
-		public static string GetApiKey()
-		{
-			return "AIzaSyACqhxmHfAZXslRcDf2uVZ6UTW1jPhP2KA";
-		}
+	    private static string GetApiKey()
+	    {
+	        //API-Key: AIzaSyACqhxmHfAZXslRcDf2uVZ6UTW1jPhP2KA
+            var apiKey = Settings.ApiKey;
+	        return apiKey;
+	    }
 
-		public static string GetGoogleApi(double latitude, double longitude)
+	    public static string GetGoogleApi(double latitude, double longitude)
 		{
 			CultureInfo InvC = new CultureInfo("");
 			var googleApi = $"https://maps.googleapis.com/maps/api/geocode/json?latlng={latitude.ToString(InvC)},{longitude.ToString(InvC)}&key={GetApiKey()}";
+			Debug.WriteLine("GoogleAPI: " + googleApi);
 			return googleApi;
 		}
 

@@ -17,6 +17,12 @@ namespace ODataExample.Views
 			BindingContext = new NewAddressViewModel();
 		}
 
+		/*public NewAddressPage(Settings settings)
+		{
+			InitializeComponent();
+			BindingContext = new NewAddressViewModel(settings);
+		}*/
+
 		public NewAddressPage(Address address)
 		{
 			InitializeComponent();
@@ -40,6 +46,7 @@ namespace ODataExample.Views
 		{
 			MessagingCenter.Subscribe<NewAddressViewModel, Address>(this, "NavigateToAddresses", async (obj, address) =>
 			{
+				Debug.WriteLine("Subscribe NewAddressPage NavigateToNewAddresses" );
 				if (address != null)
 				{
 					await Navigation.PushAsync(new AddressPage(address));
@@ -48,6 +55,8 @@ namespace ODataExample.Views
 
 			MessagingCenter.Subscribe<NewAddressViewModel, Address>(this, "NavigateToMap", async (obj, address) =>
 			{
+				Debug.WriteLine("Subscribe NewAddressPage NavigateToMap" );
+
 				if (address != null)
 				{
 					await Navigation.PushAsync(new MapPage(address));

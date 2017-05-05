@@ -9,11 +9,13 @@ namespace ODataExample.ViewModels
         public ICommand GoNewAddressCommand { get; set; }
         public ICommand GoAddressesCommand { get; set; }
         public ICommand GoAboutCommand { get; set; }
+		public ICommand GoSettingsCommand { get; set; }
 
         public MenuPageViewModel()
         {
             GoNewAddressCommand = new Command(GoNewAddress);
             GoAddressesCommand = new Command(GoAddresses);
+			GoSettingsCommand = new Command(GoSettings);
             GoAboutCommand = new Command(GoAbout);
 		}
 
@@ -28,6 +30,12 @@ namespace ODataExample.ViewModels
             App.NavigationPage.Navigation.PushAsync(new AddressPage());
             App.MenuIsPresented = false;
         }
+
+		void GoSettings(object obj)
+		{
+			App.NavigationPage.Navigation.PushAsync(new SettingsPage());
+			App.MenuIsPresented = false;
+		}
 
         void GoAbout(object obj)
         {

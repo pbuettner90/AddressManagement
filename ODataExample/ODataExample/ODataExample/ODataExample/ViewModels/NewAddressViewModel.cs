@@ -14,6 +14,7 @@ namespace ODataExample.ViewModels
 	public class NewAddressViewModel : BaseViewModel
 	{
 		public Address Address { get; set; }
+
         bool _isSet;
 
 		public Command ShowMapCommand { get; set; }
@@ -22,7 +23,6 @@ namespace ODataExample.ViewModels
 
 		public NewAddressViewModel()
 		{
-			
 			if (Address == null)
 			{
 				Address = new Address();
@@ -38,13 +38,12 @@ namespace ODataExample.ViewModels
 			_isSet = true;
 			Address = address;
 			ShowMapCommand = new Command(async () => await ShowMap());
-			AddAddressCommand = new Command(() => AddAddress());
+			AddAddressCommand = new Command(async () => await AddAddress());
 			GetAddressCommand = new Command(async () => await GetAddress());
 		}
 
 		async Task GetUserLocation()
 		{
-
 			if (IsBusy)
 			{
 				return;
@@ -65,7 +64,7 @@ namespace ODataExample.ViewModels
 
 				var latitude = position.Latitude;
 				var longitude = position.Longitude;
-
+		
 				var googleApi = GoogleService.GetGoogleApi(latitude, longitude);
 				var googleResponseJson = await GoogleService.GetJsonResponse(googleApi);
 				await GoogleService.GetAddress(Address, googleResponseJson);
@@ -83,7 +82,7 @@ namespace ODataExample.ViewModels
             }
 		}
 
-		async Task AddAddress()
+	    async Task AddAddress()
 		{
 		    try
 			{
@@ -96,7 +95,7 @@ namespace ODataExample.ViewModels
 
 		        else
 		        {
-		            MessagingCenter.Send(this, "NavigateToAddresses", Address);
+					MessagingCenter.Send(this, "NavigateToAddresses", Address);
 		        }
 		    }
 

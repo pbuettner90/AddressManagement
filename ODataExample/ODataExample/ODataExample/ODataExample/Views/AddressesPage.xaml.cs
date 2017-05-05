@@ -9,10 +9,6 @@ namespace ODataExample.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class AddressPage : ContentPage
 	{
-		public Address Address { get; set; }
-
-		//protected AddressesViewModel AddressViewModel => (AddressesViewModel)BindingContext;
-
 		public AddressPage()
 		{
 			InitializeComponent();
@@ -61,19 +57,6 @@ namespace ODataExample.Views
 			MessagingCenter.Unsubscribe<AddressesViewModel, Address>(this, "AddNewAddress");
 
 		}
-
-		/*private void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
-		{
-			var param = e.SelectedItem as Address;
-			var command = ((AddressesViewModel)BindingContext).SelectedItemCommand;
-
-			if (command.CanExecute(param))
-			{
-				Debug.WriteLine(param.FirstName);
-				command.Execute(param);
-
- 			}
-		}*/
 	}
 }
 

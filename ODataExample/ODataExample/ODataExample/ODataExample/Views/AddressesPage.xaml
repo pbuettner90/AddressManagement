@@ -45,8 +45,9 @@
 				Header="{Binding Header}">
 
 				<ListView.Behaviors>
-		<local:ListViewSelectedItemBehavior Command="{Binding OutputAgeCommand}" 
-            Converter="{StaticResource SelectedItemConverter}" />
+					<local:ListViewSelectedItemBehavior Command="{Binding SelectedItemCommand}" 
+            			Converter="{StaticResource SelectedItemConverter}" 
+					/>
 	</ListView.Behaviors>
 
 				<ListView.HeaderTemplate>

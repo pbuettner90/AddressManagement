@@ -12,7 +12,7 @@ namespace ODataExample.ViewModels
 {
 	public class AddressesViewModel : BaseViewModel
 	{
-		public Address Address { get; set; }
+		public Address HeaderAddress { get; set; }
 		ObservableCollection<Address> _addresses;
 		public string Search { get; set; }
 
@@ -26,19 +26,19 @@ namespace ODataExample.ViewModels
 
 		public string Header
 		{
-			get => $"Ihre Addresse: {Address.FirstName} {Address.Street} {Address.City}";
-			}
+			get => $"Ihre Addresse: {HeaderAddress.FirstName} {HeaderAddress.Street} {HeaderAddress.City}";
+		}
 
 		public AddressesViewModel() : this(new Address())
 		{
-			Address = new Address();
+			HeaderAddress = new Address();
 			//GetData();
 		}
 
 		public AddressesViewModel(Address address)
 		{
-			AddressList = new ObservableCollection<Address>();
-			Address = address;
+            AddressList = new ObservableCollection<Address>();
+			HeaderAddress = address;
 			CustomerSearchCommand = new Command(async () => await CustomerSearch());
 
 			SelectedItemCommand = new Command<Address>(SelectedItem);
@@ -76,7 +76,7 @@ namespace ODataExample.ViewModels
 
 			try
 			{
-				var addresses = await DependencyService.Get<IDataService>().SortAddressesAsync(Address);
+				var addresses = await DependencyService.Get<IDataService>().SortAddressesAsync(HeaderAddress);
 
 				foreach (var customer in addresses)
 				{
@@ -133,7 +133,7 @@ namespace ODataExample.ViewModels
 			{
 				return new Command(() =>
 			   {
-				   MessagingCenter.Send(this, "AddNewAddress", Address);
+					MessagingCenter.Send(this, "AddNewAddress", HeaderAddress);
 			   });
 			}
 		}

@@ -93,57 +93,29 @@ namespace ODataExample.Controls
 			}
 		}
 
+
 		Label lFirstName, lLastName, lStreet, lCity, lPlz;
 		Button btnAddressMatch;
 
 		public AddressCell()
 		{
+			lFirstName = new Label();
+			lFirstName.FontSize = 13;
+			lFirstName.VerticalOptions = LayoutOptions.Center;
 
-			lFirstName = new Label
-			{
-				HorizontalOptions = LayoutOptions.StartAndExpand,
-				VerticalOptions = LayoutOptions.Center,
-				FontSize = 13
-			};
+			lStreet = new Label();
+			lStreet.FontSize = 13;
+			lStreet.VerticalOptions = LayoutOptions.Center;
 
-			lLastName = new Label
-			{
-				HorizontalOptions = LayoutOptions.EndAndExpand,
-				VerticalOptions = LayoutOptions.Center,
-				FontSize = 13
-			};
+			lCity = new Label();
+			lCity.FontSize = 13;
+			lCity.VerticalOptions = LayoutOptions.Center;
 
-			lStreet = new Label
-			{
-				HorizontalOptions = LayoutOptions.EndAndExpand,
-				VerticalOptions = LayoutOptions.Center,
-				FontSize = 13
-			};
-
-			lCity = new Label
-			{
-				HorizontalOptions = LayoutOptions.EndAndExpand,
-				VerticalOptions = LayoutOptions.Center,
-				FontSize = 13
-			};
-
-			lPlz = new Label
-			{
-				HorizontalOptions = LayoutOptions.EndAndExpand,
-				VerticalOptions = LayoutOptions.Center,
-				FontSize = 13
-			};
-
-			btnAddressMatch = new Button
-			{
-				Text = "Addresse zuordnen",
-				BackgroundColor = Color.Transparent,
-				HorizontalOptions = LayoutOptions.EndAndExpand,
-				VerticalOptions = LayoutOptions.Center,
-				FontSize = 13
-			};
-
+			btnAddressMatch = new Button();
+			btnAddressMatch.BackgroundColor = Color.Transparent;
+			btnAddressMatch.Text = "Addresse zuordnen";
 			btnAddressMatch.Clicked += BtnMatchToAddress;
+
 
 			Grid infoLayout = new Grid
 			{
@@ -152,33 +124,16 @@ namespace ODataExample.Controls
 					new ColumnDefinition { Width = new GridLength(1,GridUnitType.Star) },
 					new ColumnDefinition { Width = new GridLength(1,GridUnitType.Star) },
 					new ColumnDefinition { Width = new GridLength(1,GridUnitType.Star) },
-					new ColumnDefinition { Width = new GridLength(1,GridUnitType.Star) },
-					new ColumnDefinition { Width = new GridLength(1,GridUnitType.Star) }
-
-				},
-				HorizontalOptions = LayoutOptions.FillAndExpand
-			};
-
-			infoLayout.Children.Add(lFirstName, 0, 0);
-			infoLayout.Children.Add(lLastName, 1, 0);
-			infoLayout.Children.Add(lStreet, 2, 0);
-			infoLayout.Children.Add(lCity, 3, 0);
-			infoLayout.Children.Add(btnAddressMatch, 4, 0);
-
-			var cellWrapper = new Grid
-			{
-				Padding = 10,
-				ColumnDefinitions =
-				{
-					new ColumnDefinition { Width = new GridLength(1,GridUnitType.Auto) },
-					new ColumnDefinition { Width = new GridLength(1,GridUnitType.Star) },
+					new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
 				}
 			};
 
+			infoLayout.Children.Add(lFirstName, 0, 0);
+			infoLayout.Children.Add(lStreet, 1, 0);
+			infoLayout.Children.Add(lCity, 2, 0);
+			infoLayout.Children.Add(btnAddressMatch, 3, 0);
 
-			cellWrapper.Children.Add(infoLayout, 1, 0);
-
-			View = cellWrapper;
+			View = infoLayout;
 		}
 
 		protected override void OnBindingContextChanged()
@@ -197,8 +152,6 @@ namespace ODataExample.Controls
 		async void BtnMatchToAddress(object sender, EventArgs e)
 		{
 			await Application.Current.MainPage.DisplayAlert("ID", "ID: " + Id, "OK");
-
-
 		}
 	}
 

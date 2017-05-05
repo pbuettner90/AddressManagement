@@ -17,10 +17,7 @@ namespace ODataExample.Views
 		{
 			InitializeComponent();
 			ShowMap(address);
-
 		}
-
-
 
 		async Task ShowMap(Address address)
 		{

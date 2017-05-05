@@ -16,7 +16,9 @@ namespace ODataExample.Services
 
         public AzureDataStoreService()
         {
-            Client = new ODataClient("http://odatatestservice.azurewebsites.net/odata");
+            Client = new ODataClient(Settings.Url);
+            //URL Webservice: "http://odatatestservice.azurewebsites.net/odata";	
+
         }
 
         public async Task AddAddressAsync(Address address)
@@ -74,8 +76,6 @@ namespace ODataExample.Services
                 })
                 .UpdateEntryAsync();
         }
-
-
 
         private async Task<IEnumerable<dynamic>> GetOData()
         {
