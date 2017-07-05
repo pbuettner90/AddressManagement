@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage 
+	xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	x:Class="AddressManagement.Views.SettingsPage">
+
+	<ContentPage.Content>
+
+		<StackLayout Margin="10">
+			<Label
+				FontSize="Medium"
+				Margin="20,40,0,0" 
+				Text="URL des Webservice"/>
+
+			<Entry
+				Text="{Binding Url}"
+				Margin="20,10,0,0" 
+				Placeholder="Geben Sie die URL des Webservices ein"/>
+
+			<Label 
+				FontSize="Medium"
+				Margin="20,40,0,0" 
+				Text="Google API Key"/>
+			<Entry 
+				Margin="20,10,0,0" 
+				Placeholder = "Geben Sie Ihren Google API Key ein"
+				Text="{Binding ApiKey}"/>
+			
+			<Label 
+				x:Name = "lblWebService"
+				FontSize="Medium"
+				Margin="20,20,0,0"
+				Text="Interner Webservice"/>
+			
+			<Switch
+				
+				Margin = "20,20,0,0"
+				VerticalOptions="StartAndExpand"
+				HorizontalOptions="StartAndExpand"  
+				IsToggled="{Binding InternalWebservice}"
+				Toggled="SetInternalWebService"
+			/>
+
+			<Button  
+				BackgroundColor="Transparent"
+				Command = "{Binding SettingsCommand}"
+				FontSize = "Medium"
+				VerticalOptions="Center"
+				HorizontalOptions="Center" 
+				Text="Speichern"/>
+		</StackLayout> 
+	</ContentPage.Content>
+</ContentPage>

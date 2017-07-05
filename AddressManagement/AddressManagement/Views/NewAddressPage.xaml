@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AddressManagement.Views.NewAddressPage">
+	<ContentPage.Content>
+		<StackLayout Spacing="10" Margin="10,10,10,10">
+			<StackLayout Orientation="Horizontal" Margin="10" Spacing="40">
+				<Label Text="Vorname" FontSize="Medium" WidthRequest="120" />
+				<Label Text="Nachname" FontSize="Medium" WidthRequest="120" />
+			</StackLayout>
+			<StackLayout Orientation="Horizontal" Margin="10" Spacing="60">
+				<Entry x:Name="FirstName" Text="{Binding Address.FirstName}" WidthRequest="120" />
+				<Entry x:Name="LastName" Text="{Binding Address.LastName}" WidthRequest="120" />
+			</StackLayout>
+			<StackLayout Margin="10">
+				<Label Text="Strasse" FontSize="Medium" />
+				<Entry x:Name="Street" Text="{Binding Address.Street}" />
+			</StackLayout>
+			<StackLayout Orientation="Horizontal" Margin="10" Spacing="40">
+				<Label Text="PLZ" FontSize="Medium" WidthRequest="100" />
+				<Label Text="Ort" FontSize="Medium" WidthRequest="100" />
+			</StackLayout>
+			<StackLayout Orientation="Horizontal" Margin="10" Spacing="60">
+				<Entry x:Name="Plz" Text="{Binding Address.Plz}" WidthRequest="100" />
+				<Entry x:Name="City" Text="{Binding Address.City}" WidthRequest="150" />
+			</StackLayout>
+			<Grid Margin="0,20,10,10">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Button x:Name="btnCheck" BackgroundColor="Transparent" FontSize="30" FontFamily="FontAwesome" Text="" Command="{Binding AddAddressCommand}" Grid.Column="0" />
+				<Button x:Name="btnGetAddress" BackgroundColor="Transparent" FontFamily="FontAwesome" WidthRequest="60" FontSize="30" Text="" Command="{Binding GetAddressCommand}" Grid.Column="1" />
+				<Button WidthRequest="60" BackgroundColor="Transparent" FontFamily="FontAwesome" FontSize="30" Text="" Command="{Binding ShowMapCommand}" Grid.Column="2" />
+			</Grid>
+			<StackLayout IsVisible="{Binding IsBusy}" Padding="12" AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1">
+				<ActivityIndicator IsRunning="{Binding IsBusy}" Color="#80000000" />
+				<Label Text="Suche der Addresse..." HorizontalOptions="Center" TextColor="Black" />
+			</StackLayout>
+		</StackLayout>
+	</ContentPage.Content>
+</ContentPage>

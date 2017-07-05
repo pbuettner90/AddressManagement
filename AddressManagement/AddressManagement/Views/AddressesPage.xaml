@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage 
+	xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	xmlns:c="clr-namespace:AddressManagement.Controls" 
+	xmlns:local="clr-namespace:AddressManagement.Helper"
+	x:Class="AddressManagement.Views.AddressesPage"
+	Title="Addressverwaltung">
+
+	<ContentPage.Resources>
+		<ResourceDictionary>
+			<local:SelectedItemEventArgsToSelectedItemConverter x:Key="SelectedItemConverter" />
+		</ResourceDictionary>
+	</ContentPage.Resources>
+
+	<ContentPage.Content>
+
+		<StackLayout Margin="10">
+			<StackLayout Orientation="Horizontal">
+				<Entry 
+					x:Name="customerSearch" 
+					WidthRequest="200" Text="{Binding Search}" 
+					VerticalOptions="CenterAndExpand" 
+					HorizontalOptions="StartAndExpand" 
+					Placeholder="Suche" />
+				<Button 
+					x:Name="btnCustomerSearch" 
+					BackgroundColor="Transparent"
+					VerticalOptions="CenterAndExpand" 
+					HorizontalOptions="EndAndExpand" 
+					Text="Suche" 
+					Command="{Binding CustomerSearchCommand}" />
+
+				<Button
+					BackgroundColor="Transparent"
+					VerticalOptions="CenterAndExpand" 
+					HorizontalOptions="EndAndExpand" 
+					Text="Neuanlage"
+					Command = "{Binding NewCustomerCommand}"/>
+			</StackLayout>
+
+		
+			<ListView 
+				x:Name="AddressList" 
+				IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+				IsPullToRefreshEnabled="false"
+				ItemsSource="{Binding AddressList}"
+				Header="{Binding Header}">
+
+				<ListView.Behaviors>
+					<local:ListViewSelectedItemBehavior Command="{Binding SelectedItemCommand}" 
+            			Converter="{StaticResource SelectedItemConverter}" 
+					/>
+				</ListView.Behaviors>
+
+				<ListView.HeaderTemplate>
+					<DataTemplate>
+						<StackLayout Orientation="Horizontal" 
+									 BackgroundColor="Yellow"
+									 Margin="10"
+										 >
+							<Label Margin = "10" Text="{Binding .}"/>
+						</StackLayout>
+					</DataTemplate>
+				</ListView.HeaderTemplate>
+
+				<ListView.ItemTemplate>
+					<DataTemplate>
+						
+				<c:AddressCell
+								Id = "{Binding Id}" 
+								FirstName="{Binding FirstName}"
+								LastName="{Binding LastName}" 
+								Street="{Binding Street}" 
+								Plz="{Binding Plz}" 
+								City="{Binding City}" 
+						/>
+								
+			</DataTemplate>				
+		</ListView.ItemTemplate>
+			</ListView>
+
+			<Grid Margin="10">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Entry Placeholder="Kommentar" Grid.Row="0" Grid.ColumnSpan="3" />
+				<Button 
+					BackgroundColor="Transparent"
+					Text="Dublette zuordnen" 
+					Grid.Row="1" 
+					Grid.Column="2" />
+			</Grid>
+
+		</StackLayout>
+	</ContentPage.Content>
+</ContentPage>
